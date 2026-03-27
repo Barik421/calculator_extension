@@ -10,7 +10,7 @@
 
   const translations = {
     en: {
-      appTitle: "Simple Calculator",
+      appTitle: "BRNV Calculator",
       history: "History",
       noHistory: "No calculations yet",
       historyDisabled: "History is disabled in settings",
@@ -31,8 +31,8 @@
       decimal: ".",
       openBracket: "(",
       closeBracket: ")",
-      optionsTitle: "Calculator settings",
-      optionsDescription: "Customize language, history, and layout preferences for your extension pack.",
+      optionsTitle: "BRNV Calculator",
+      optionsDescription: "",
       language: "Language",
       languageEnglish: "English",
       languageUkrainian: "Ukrainian",
@@ -40,10 +40,10 @@
       historyLimit: "Recent calculations to keep",
       compactMode: "Compact mode",
       saveStatus: "Settings saved",
-      largeViewTitle: "Large calculator view"
+      largeViewTitle: "BRNV Calculator"
     },
     uk: {
-      appTitle: "Простий калькулятор",
+      appTitle: "BRNV Calculator",
       history: "Історія",
       noHistory: "Обчислень ще немає",
       historyDisabled: "Історію вимкнено в налаштуваннях",
@@ -64,8 +64,8 @@
       decimal: ",",
       openBracket: "(",
       closeBracket: ")",
-      optionsTitle: "Налаштування калькулятора",
-      optionsDescription: "Змініть мову, історію та параметри вигляду для вашого extension pack.",
+      optionsTitle: "BRNV Calculator",
+      optionsDescription: "",
       language: "Мова",
       languageEnglish: "Англійська",
       languageUkrainian: "Українська",
@@ -73,7 +73,7 @@
       historyLimit: "Скільки останніх обчислень зберігати",
       compactMode: "Компактний режим",
       saveStatus: "Налаштування збережено",
-      largeViewTitle: "Великий вигляд калькулятора"
+      largeViewTitle: "BRNV Calculator"
     }
   };
 

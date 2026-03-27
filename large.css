@@ -93,7 +93,7 @@ h2 {
 .screen-expression {
   margin: 0 0 8px;
   min-height: 22px;
-  text-align: right;
+  text-align: left;
   font-size: 15px;
   font-weight: 600;
   color: var(--muted);

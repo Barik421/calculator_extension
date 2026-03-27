@@ -67,7 +67,7 @@ body[data-compact="true"] {
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
-  text-align: right;
+  text-align: left;
 }
 
 .screen {

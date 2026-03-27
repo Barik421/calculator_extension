@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Simple Calculator",
+  "name": "BRNV Calculator",
   "version": "1.0.0",
   "description": "A clean, lightweight calculator for quick daily use from the Chrome toolbar.",
   "action": {
-    "default_title": "Simple Calculator",
+    "default_title": "BRNV Calculator",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
