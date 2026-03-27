@@ -6,7 +6,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     saveHistoryItem,
     clearHistory,
     bindTranslations,
-    getLocaleText
+    getLocaleText,
+    localizeExpression
   } = window.CalculatorApp;
 
   const display = document.getElementById("display");
@@ -32,13 +33,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       return getLocaleText(settings.language, "error");
     }
 
-    return settings.language === "uk" ? value.replace(".", ",") : value;
+    return localizeExpression(value, settings.language);
   }
 
   function syncView() {
     const state = engine.getState();
     display.textContent = localizeDisplayValue(state.displayValue);
-    expression.textContent = state.expression || "0";
+    expression.textContent = localizeDisplayValue(state.expressionValue || "0");
+    display.scrollLeft = display.scrollWidth;
   }
 
   function renderHistory() {
@@ -59,11 +61,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       button.className = "history-item";
       button.type = "button";
       button.innerHTML = `
-        <p class="history-expression">${item.expression}</p>
+        <p class="history-expression">${localizeDisplayValue(item.expression)}</p>
         <p class="history-result">${localizeDisplayValue(item.result)}</p>
       `;
       button.addEventListener("click", () => {
-        engine.restore(item.result, item.expression);
+        engine.restore(item.rawExpression || item.result);
         syncView();
       });
       historyList.appendChild(button);
@@ -79,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         engine.inputDecimal();
         break;
       case "operator":
-        engine.setOperator(value);
+        engine.inputOperator(value);
         break;
       case "equals":
         engine.calculate();
@@ -95,6 +97,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         break;
       case "percent":
         engine.percent();
+        break;
+      case "paren":
+        engine.inputParenthesis(value);
         break;
       default:
         break;
@@ -120,6 +125,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       "*": ["operator", "*"],
       "/": ["operator", "/"],
       "%": ["percent"],
+      "(": ["paren", "("],
+      ")": ["paren", ")"],
       Enter: ["equals"],
       "=": ["equals"],
       Backspace: ["delete"],

@@ -6,7 +6,7 @@
     compactMode: false
   };
 
-  const MAX_DISPLAY_LENGTH = 14;
+  const MAX_RESULT_LENGTH = 18;
 
   const translations = {
     en: {
@@ -29,6 +29,8 @@
       add: "+",
       equals: "=",
       decimal: ".",
+      openBracket: "(",
+      closeBracket: ")",
       optionsTitle: "Calculator settings",
       optionsDescription: "Customize language, history, and layout preferences for your extension pack.",
       language: "Language",
@@ -38,10 +40,7 @@
       historyLimit: "Recent calculations to keep",
       compactMode: "Compact mode",
       saveStatus: "Settings saved",
-      largeViewTitle: "Large calculator view",
-      reuseResult: "Reuse result",
-      expression: "Expression",
-      result: "Result"
+      largeViewTitle: "Large calculator view"
     },
     uk: {
       appTitle: "Простий калькулятор",
@@ -63,6 +62,8 @@
       add: "+",
       equals: "=",
       decimal: ",",
+      openBracket: "(",
+      closeBracket: ")",
       optionsTitle: "Налаштування калькулятора",
       optionsDescription: "Змініть мову, історію та параметри вигляду для вашого extension pack.",
       language: "Мова",
@@ -72,16 +73,37 @@
       historyLimit: "Скільки останніх обчислень зберігати",
       compactMode: "Компактний режим",
       saveStatus: "Налаштування збережено",
-      largeViewTitle: "Великий вигляд калькулятора",
-      reuseResult: "Повторно використати результат",
-      expression: "Вираз",
-      result: "Результат"
+      largeViewTitle: "Великий вигляд калькулятора"
     }
   };
 
   function getLocaleText(language, key) {
     const locale = translations[language] || translations.en;
     return locale[key] || translations.en[key] || key;
+  }
+
+  function isDigit(char) {
+    return /\d/.test(char);
+  }
+
+  function isOperator(char) {
+    return ["+", "-", "*", "/"].includes(char);
+  }
+
+  function countOccurrences(text, char) {
+    return [...text].filter((item) => item === char).length;
+  }
+
+  function normalizeExpression(expression) {
+    return expression
+      .replace(/\*/g, "×")
+      .replace(/\//g, "÷")
+      .replace(/-/g, "−");
+  }
+
+  function localizeExpression(expression, language) {
+    const normalized = normalizeExpression(expression);
+    return language === "uk" ? normalized.replace(/\./g, ",") : normalized;
   }
 
   function formatNumber(value) {
@@ -96,11 +118,221 @@
 
     const normalized = Number.parseFloat(value.toFixed(10));
     const text = `${normalized}`;
-    return text.length > MAX_DISPLAY_LENGTH ? normalized.toPrecision(10).replace(/\.?0+$/, "") : text;
+    return text.length > MAX_RESULT_LENGTH ? normalized.toPrecision(12).replace(/\.?0+$/, "") : text;
   }
 
-  function normalizeExpression(expression) {
-    return expression.replace(/\*/g, "×").replace(/\//g, "÷").replace(/-/g, "−");
+  function findCurrentNumberRange(expression) {
+    if (!expression) {
+      return null;
+    }
+
+    let end = expression.length - 1;
+    if (!isDigit(expression[end]) && expression[end] !== ".") {
+      return null;
+    }
+
+    let start = end;
+    while (start >= 0 && (isDigit(expression[start]) || expression[start] === ".")) {
+      start -= 1;
+    }
+
+    const signIndex = start;
+    const unaryMinus =
+      signIndex >= 0 &&
+      expression[signIndex] === "-" &&
+      (signIndex === 0 || isOperator(expression[signIndex - 1]) || expression[signIndex - 1] === "(");
+
+    return {
+      start: unaryMinus ? signIndex : start + 1,
+      end: end + 1
+    };
+  }
+
+  function tokenizeExpression(expression) {
+    const tokens = [];
+    let index = 0;
+
+    while (index < expression.length) {
+      const char = expression[index];
+      const previous = tokens[tokens.length - 1];
+      const unaryMinus = char === "-" && (!previous || previous.type === "operator" || previous.type === "leftParen");
+
+      if (unaryMinus && expression[index + 1] === "(") {
+        tokens.push({ type: "number", value: "-1" });
+        tokens.push({ type: "operator", value: "*" });
+        index += 1;
+        continue;
+      }
+
+      if (isDigit(char) || char === "." || (unaryMinus && (isDigit(expression[index + 1]) || expression[index + 1] === "."))) {
+        let number = unaryMinus ? "-" : "";
+        if (unaryMinus) {
+          index += 1;
+        }
+
+        let dotCount = 0;
+        while (index < expression.length && (isDigit(expression[index]) || expression[index] === ".")) {
+          if (expression[index] === ".") {
+            dotCount += 1;
+            if (dotCount > 1) {
+              return null;
+            }
+          }
+          number += expression[index];
+          index += 1;
+        }
+
+        if (number === "-" || number === "." || number === "-.") {
+          return null;
+        }
+
+        tokens.push({ type: "number", value: number });
+        continue;
+      }
+
+      if (isOperator(char)) {
+        tokens.push({ type: "operator", value: char });
+        index += 1;
+        continue;
+      }
+
+      if (char === "(") {
+        tokens.push({ type: "leftParen", value: char });
+        index += 1;
+        continue;
+      }
+
+      if (char === ")") {
+        tokens.push({ type: "rightParen", value: char });
+        index += 1;
+        continue;
+      }
+
+      return null;
+    }
+
+    return tokens;
+  }
+
+  function toRpn(tokens) {
+    const output = [];
+    const operators = [];
+    const precedence = {
+      "+": 1,
+      "-": 1,
+      "*": 2,
+      "/": 2
+    };
+
+    for (const token of tokens) {
+      if (token.type === "number") {
+        output.push(token);
+        continue;
+      }
+
+      if (token.type === "operator") {
+        while (operators.length > 0) {
+          const top = operators[operators.length - 1];
+          if (top.type === "operator" && precedence[top.value] >= precedence[token.value]) {
+            output.push(operators.pop());
+          } else {
+            break;
+          }
+        }
+        operators.push(token);
+        continue;
+      }
+
+      if (token.type === "leftParen") {
+        operators.push(token);
+        continue;
+      }
+
+      if (token.type === "rightParen") {
+        let foundLeftParen = false;
+        while (operators.length > 0) {
+          const top = operators.pop();
+          if (top.type === "leftParen") {
+            foundLeftParen = true;
+            break;
+          }
+          output.push(top);
+        }
+
+        if (!foundLeftParen) {
+          return null;
+        }
+      }
+    }
+
+    while (operators.length > 0) {
+      const top = operators.pop();
+      if (top.type === "leftParen") {
+        return null;
+      }
+      output.push(top);
+    }
+
+    return output;
+  }
+
+  function evaluateRpn(tokens) {
+    const stack = [];
+
+    for (const token of tokens) {
+      if (token.type === "number") {
+        stack.push(Number.parseFloat(token.value));
+        continue;
+      }
+
+      const right = stack.pop();
+      const left = stack.pop();
+
+      if (left === undefined || right === undefined) {
+        return null;
+      }
+
+      switch (token.value) {
+        case "+":
+          stack.push(left + right);
+          break;
+        case "-":
+          stack.push(left - right);
+          break;
+        case "*":
+          stack.push(left * right);
+          break;
+        case "/":
+          if (right === 0) {
+            return null;
+          }
+          stack.push(left / right);
+          break;
+        default:
+          return null;
+      }
+    }
+
+    return stack.length === 1 ? stack[0] : null;
+  }
+
+  function evaluateExpression(expression) {
+    const tokens = tokenizeExpression(expression);
+    if (!tokens) {
+      return null;
+    }
+
+    const rpn = toRpn(tokens);
+    if (!rpn) {
+      return null;
+    }
+
+    const result = evaluateRpn(rpn);
+    if (result === null) {
+      return null;
+    }
+
+    return formatNumber(result);
   }
 
   class CalculatorEngine {
@@ -110,168 +342,187 @@
     }
 
     clearAll() {
-      this.displayValue = "0";
-      this.previousValue = null;
-      this.operator = null;
-      this.waitingForOperand = false;
-      this.error = false;
       this.expression = "";
+      this.previewValue = "0";
+      this.resultValue = null;
+      this.lastSolvedExpression = "";
+      this.justEvaluated = false;
+      this.error = false;
     }
 
     getState() {
+      if (this.error) {
+        return {
+          displayValue: "Error",
+          expressionValue: this.lastSolvedExpression || "",
+          rawExpression: "",
+          error: true
+        };
+      }
+
+      if (this.justEvaluated) {
+        return {
+          displayValue: this.resultValue || "0",
+          expressionValue: normalizeExpression(this.lastSolvedExpression),
+          rawExpression: this.expression,
+          error: false
+        };
+      }
+
       return {
-        displayValue: this.displayValue,
-        previousValue: this.previousValue,
-        operator: this.operator,
-        waitingForOperand: this.waitingForOperand,
-        error: this.error,
-        expression: this.expression
+        displayValue: this.expression || "0",
+        expressionValue: this.previewValue || "0",
+        rawExpression: this.expression,
+        error: false
       };
     }
 
-    restore(value, expression) {
+    restore(rawExpression) {
       this.clearAll();
-      this.displayValue = `${value}`;
-      this.expression = expression || "";
+      this.expression = rawExpression || "";
+      this.previewValue = this.computePreview();
     }
 
     inputDigit(digit) {
-      if (this.error) {
+      if (this.error || this.justEvaluated) {
         this.clearAll();
       }
 
-      if (this.waitingForOperand) {
-        this.displayValue = digit;
-        this.waitingForOperand = false;
-        return;
+      const range = findCurrentNumberRange(this.expression);
+      if (range) {
+        const current = this.expression.slice(range.start, range.end);
+        if (current === "0") {
+          this.expression = `${this.expression.slice(0, range.start)}${digit}`;
+          this.previewValue = this.computePreview();
+          return;
+        }
+
+        if (current === "-0") {
+          this.expression = `${this.expression.slice(0, range.start)}-${digit}`;
+          this.previewValue = this.computePreview();
+          return;
+        }
       }
 
-      if (this.displayValue === "0") {
-        this.displayValue = digit;
-        return;
-      }
-
-      if (this.displayValue.length >= MAX_DISPLAY_LENGTH) {
-        return;
-      }
-
-      this.displayValue += digit;
+      this.expression += digit;
+      this.previewValue = this.computePreview();
     }
 
     inputDecimal() {
-      if (this.error) {
+      if (this.error || this.justEvaluated) {
         this.clearAll();
       }
 
-      if (this.waitingForOperand) {
-        this.displayValue = "0.";
-        this.waitingForOperand = false;
-        return;
-      }
-
-      if (!this.displayValue.includes(".")) {
-        this.displayValue += ".";
-      }
-    }
-
-    setOperator(nextOperator) {
-      if (this.error) {
-        return;
-      }
-
-      const inputValue = Number.parseFloat(this.displayValue);
-
-      if (this.operator && this.waitingForOperand) {
-        this.operator = nextOperator;
-        return;
-      }
-
-      if (this.previousValue === null) {
-        this.previousValue = inputValue;
-      } else if (this.operator) {
-        const result = this.performCalculation(this.previousValue, inputValue, this.operator);
-        if (result === null) {
-          this.setError();
+      const range = findCurrentNumberRange(this.expression);
+      if (range) {
+        const current = this.expression.slice(range.start, range.end);
+        if (current.includes(".")) {
           return;
         }
-        this.previousValue = result;
-        this.displayValue = formatNumber(result) || "0";
+        this.expression += ".";
+        this.previewValue = this.computePreview();
+        return;
       }
 
-      this.operator = nextOperator;
-      this.waitingForOperand = true;
-      this.expression = `${formatNumber(this.previousValue) || this.previousValue} ${normalizeExpression(nextOperator)}`;
+      const lastChar = this.expression.slice(-1);
+      if (!this.expression || isOperator(lastChar) || lastChar === "(") {
+        this.expression += "0.";
+        this.previewValue = this.computePreview();
+      }
     }
 
-    calculate() {
-      if (this.error || this.operator === null || this.waitingForOperand) {
-        return null;
+    inputOperator(operator) {
+      if (this.error) {
+        return;
       }
 
-      const currentValue = Number.parseFloat(this.displayValue);
-      const result = this.performCalculation(this.previousValue, currentValue, this.operator);
-
-      if (result === null) {
-        this.setError();
-        return null;
+      if (this.justEvaluated) {
+        this.expression = this.resultValue || "0";
+        this.justEvaluated = false;
       }
 
-      const left = formatNumber(this.previousValue) || `${this.previousValue}`;
-      const right = formatNumber(currentValue) || `${currentValue}`;
-      const expression = `${left} ${normalizeExpression(this.operator)} ${right}`;
-      const formattedResult = formatNumber(result);
-
-      if (!formattedResult) {
-        this.setError();
-        return null;
+      if (!this.expression) {
+        if (operator === "-") {
+          this.expression = "-";
+        }
+        this.previewValue = this.computePreview();
+        return;
       }
 
-      this.displayValue = formattedResult;
-      this.previousValue = null;
-      this.operator = null;
-      this.waitingForOperand = false;
-      this.expression = expression;
-
-      if (typeof this.onHistorySave === "function") {
-        this.onHistorySave({
-          expression,
-          result: formattedResult,
-          timestamp: Date.now()
-        });
+      const lastChar = this.expression.slice(-1);
+      if (isOperator(lastChar)) {
+        this.expression = `${this.expression.slice(0, -1)}${operator}`;
+      } else if (lastChar === "(" && operator === "-") {
+        this.expression += operator;
+      } else if (lastChar !== "(" && lastChar !== ".") {
+        this.expression += operator;
       }
 
-      return {
-        expression,
-        result: formattedResult
-      };
+      this.previewValue = this.computePreview();
     }
 
-    backspace() {
+    inputParenthesis(parenthesis) {
       if (this.error) {
         this.clearAll();
-        return;
       }
 
-      if (this.waitingForOperand) {
-        return;
+      if (this.justEvaluated) {
+        if (parenthesis === "(") {
+          this.expression = `${this.resultValue || "0"}*(`;
+          this.justEvaluated = false;
+          this.previewValue = this.computePreview();
+          return;
+        }
+        this.justEvaluated = false;
       }
 
-      if (this.displayValue.length === 1 || (this.displayValue.length === 2 && this.displayValue.startsWith("-"))) {
-        this.displayValue = "0";
-        return;
+      const lastChar = this.expression.slice(-1);
+      const openCount = countOccurrences(this.expression, "(");
+      const closeCount = countOccurrences(this.expression, ")");
+
+      if (parenthesis === "(") {
+        if (!this.expression || isOperator(lastChar) || lastChar === "(") {
+          this.expression += "(";
+        } else {
+          this.expression += "*(";
+        }
       }
 
-      this.displayValue = this.displayValue.slice(0, -1);
+      if (parenthesis === ")" && openCount > closeCount && (isDigit(lastChar) || lastChar === ")" )) {
+        this.expression += ")";
+      }
+
+      this.previewValue = this.computePreview();
     }
 
     toggleSign() {
-      if (this.error || this.displayValue === "0") {
+      if (this.error) {
         return;
       }
 
-      this.displayValue = this.displayValue.startsWith("-")
-        ? this.displayValue.slice(1)
-        : `-${this.displayValue}`;
+      if (this.justEvaluated) {
+        if (this.resultValue) {
+          this.expression = this.resultValue.startsWith("-") ? this.resultValue.slice(1) : `-${this.resultValue}`;
+          this.justEvaluated = false;
+          this.previewValue = this.computePreview();
+        }
+        return;
+      }
+
+      const range = findCurrentNumberRange(this.expression);
+      if (!range) {
+        const lastChar = this.expression.slice(-1);
+        if (!this.expression || isOperator(lastChar) || lastChar === "(") {
+          this.expression += "-";
+        }
+        this.previewValue = this.computePreview();
+        return;
+      }
+
+      const current = this.expression.slice(range.start, range.end);
+      const toggled = current.startsWith("-") ? current.slice(1) : `-${current}`;
+      this.expression = `${this.expression.slice(0, range.start)}${toggled}${this.expression.slice(range.end)}`;
+      this.previewValue = this.computePreview();
     }
 
     percent() {
@@ -279,45 +530,128 @@
         return;
       }
 
-      const currentValue = Number.parseFloat(this.displayValue);
-      let nextValue = currentValue / 100;
-
-      if (this.previousValue !== null && this.operator && (this.operator === "+" || this.operator === "-")) {
-        nextValue = (this.previousValue * currentValue) / 100;
+      const range = findCurrentNumberRange(this.expression);
+      if (!range) {
+        return;
       }
 
-      const formatted = formatNumber(nextValue);
+      const current = Number.parseFloat(this.expression.slice(range.start, range.end));
+      const formatted = formatNumber(current / 100);
       if (!formatted) {
         this.setError();
         return;
       }
 
-      this.displayValue = formatted;
-      this.waitingForOperand = false;
+      this.expression = `${this.expression.slice(0, range.start)}${formatted}${this.expression.slice(range.end)}`;
+      this.previewValue = this.computePreview();
     }
 
-    performCalculation(left, right, operator) {
-      switch (operator) {
-        case "+":
-          return left + right;
-        case "-":
-          return left - right;
-        case "*":
-          return left * right;
-        case "/":
-          return right === 0 ? null : left / right;
-        default:
-          return right;
+    backspace() {
+      if (this.error || this.justEvaluated) {
+        this.clearAll();
+        return;
       }
+
+      if (!this.expression) {
+        return;
+      }
+
+      this.expression = this.expression.slice(0, -1);
+      this.previewValue = this.computePreview();
+    }
+
+    calculate() {
+      if (this.error) {
+        return null;
+      }
+
+      const prepared = this.prepareExpressionForEquals();
+      if (!prepared) {
+        this.setError();
+        return null;
+      }
+
+      const result = evaluateExpression(prepared);
+      if (!result) {
+        this.setError();
+        return null;
+      }
+
+      const prettyExpression = normalizeExpression(prepared);
+      this.expression = result;
+      this.resultValue = result;
+      this.lastSolvedExpression = prettyExpression;
+      this.previewValue = result;
+      this.justEvaluated = true;
+
+      if (typeof this.onHistorySave === "function") {
+        this.onHistorySave({
+          expression: prettyExpression,
+          rawExpression: prepared,
+          result,
+          timestamp: Date.now()
+        });
+      }
+
+      return {
+        expression: prettyExpression,
+        rawExpression: prepared,
+        result
+      };
+    }
+
+    computePreview() {
+      const prepared = this.prepareExpressionForPreview();
+      if (!prepared) {
+        return "0";
+      }
+
+      return evaluateExpression(prepared) || "0";
+    }
+
+    prepareExpressionForPreview() {
+      if (!this.expression) {
+        return null;
+      }
+
+      const lastChar = this.expression.slice(-1);
+      if (isOperator(lastChar) || lastChar === "(" || lastChar === "-" || lastChar === ".") {
+        return null;
+      }
+
+      const missingClosers = countOccurrences(this.expression, "(") - countOccurrences(this.expression, ")");
+      return missingClosers > 0 ? `${this.expression}${")".repeat(missingClosers)}` : this.expression;
+    }
+
+    prepareExpressionForEquals() {
+      if (!this.expression) {
+        return null;
+      }
+
+      let prepared = this.expression;
+      while (prepared && (isOperator(prepared.slice(-1)) || prepared.slice(-1) === "." || prepared.slice(-1) === "(")) {
+        prepared = prepared.slice(0, -1);
+      }
+
+      if (!prepared || prepared === "-") {
+        return null;
+      }
+
+      const missingClosers = countOccurrences(prepared, "(") - countOccurrences(prepared, ")");
+      if (missingClosers > 0) {
+        prepared += ")".repeat(missingClosers);
+      }
+
+      return prepared;
     }
 
     setError() {
-      this.displayValue = "Error";
-      this.previousValue = null;
-      this.operator = null;
-      this.waitingForOperand = false;
-      this.error = true;
       this.expression = "";
+      this.previewValue = "0";
+      this.resultValue = null;
+      this.lastSolvedExpression = "";
+      this.justEvaluated = false;
+      this.error = true;
     }
   }
 
@@ -371,6 +705,7 @@
     clearHistory,
     bindTranslations,
     getLocaleText,
-    normalizeExpression
+    normalizeExpression,
+    localizeExpression
   };
 })();

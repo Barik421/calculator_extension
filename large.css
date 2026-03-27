@@ -87,7 +87,7 @@ h2 {
 }
 
 .screen-wrap {
-  padding: 4px 0 18px;
+  padding: 4px 0 14px;
 }
 
 .screen-expression {
@@ -100,23 +100,35 @@ h2 {
 }
 
 .screen {
-  min-height: 116px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
+  min-height: 108px;
   padding: 24px 18px;
   border-radius: 28px;
   background: linear-gradient(180deg, #ffffff 0%, #f1f1f3 100%);
   border: 1px solid #ececef;
-  font-size: 58px;
+  font-size: 48px;
   font-weight: 700;
-  line-height: 1;
-  word-break: break-all;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: right;
+  scrollbar-width: none;
+}
+
+.screen::-webkit-scrollbar {
+  display: none;
 }
 
 body[data-compact="true"] .screen {
-  min-height: 98px;
-  font-size: 50px;
+  min-height: 96px;
+  font-size: 42px;
+}
+
+.function-row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
 }
 
 .keypad {
@@ -128,7 +140,7 @@ body[data-compact="true"] .screen {
 .calc-btn {
   border: 0;
   border-radius: 999px;
-  min-height: 80px;
+  min-height: 78px;
   background: var(--button);
   color: var(--text);
   font-size: 28px;
@@ -139,6 +151,11 @@ body[data-compact="true"] .screen {
 
 body[data-compact="true"] .calc-btn {
   min-height: 72px;
+}
+
+.utility-pill {
+  min-height: 54px;
+  font-size: 18px;
 }
 
 .calc-btn:hover,
@@ -175,6 +192,12 @@ body[data-compact="true"] .calc-btn {
 
 .calc-btn.wide {
   grid-column: span 2;
+}
+
+.equals-row {
+  width: 100%;
+  margin-top: 14px;
+  min-height: 78px;
 }
 
 .toolbar-link {

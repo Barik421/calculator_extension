@@ -23,32 +23,37 @@
             <div class="screen" id="display" aria-live="polite">0</div>
           </div>
 
-          <section class="keypad">
-            <button class="calc-btn utility" data-action="clear" data-i18n="ac">AC</button>
-            <button class="calc-btn utility" data-action="delete" data-i18n="delete">DEL</button>
-            <button class="calc-btn utility" data-action="percent" data-i18n="percent">%</button>
-            <button class="calc-btn accent" data-action="operator" data-value="/" data-i18n="divide">÷</button>
+          <section class="function-row">
+            <button class="calc-btn utility utility-pill" data-action="clear" data-i18n="ac">AC</button>
+            <button class="calc-btn utility utility-pill" data-action="delete" data-i18n="delete">DEL</button>
+            <button class="calc-btn utility utility-pill" data-action="paren" data-value="(" data-i18n="openBracket">(</button>
+            <button class="calc-btn utility utility-pill" data-action="paren" data-value=")" data-i18n="closeBracket">)</button>
+            <button class="calc-btn utility utility-pill" data-action="percent" data-i18n="percent">%</button>
+          </section>
 
-            <button class="calc-btn utility" data-action="sign">±</button>
+          <section class="keypad">
             <button class="calc-btn" data-action="digit" data-value="7">7</button>
             <button class="calc-btn" data-action="digit" data-value="8">8</button>
             <button class="calc-btn" data-action="digit" data-value="9">9</button>
+            <button class="calc-btn accent" data-action="operator" data-value="/" data-i18n="divide">÷</button>
 
-            <button class="calc-btn accent" data-action="operator" data-value="*" data-i18n="multiply">×</button>
             <button class="calc-btn" data-action="digit" data-value="4">4</button>
             <button class="calc-btn" data-action="digit" data-value="5">5</button>
             <button class="calc-btn" data-action="digit" data-value="6">6</button>
+            <button class="calc-btn accent" data-action="operator" data-value="*" data-i18n="multiply">×</button>
 
-            <button class="calc-btn accent" data-action="operator" data-value="-" data-i18n="subtract">−</button>
             <button class="calc-btn" data-action="digit" data-value="1">1</button>
             <button class="calc-btn" data-action="digit" data-value="2">2</button>
             <button class="calc-btn" data-action="digit" data-value="3">3</button>
+            <button class="calc-btn accent" data-action="operator" data-value="-" data-i18n="subtract">−</button>
 
-            <button class="calc-btn accent" data-action="operator" data-value="+" data-i18n="add">+</button>
+            <button class="calc-btn utility" data-action="sign">±</button>
             <button class="calc-btn wide" data-action="digit" data-value="0">0</button>
             <button class="calc-btn" data-action="decimal" data-i18n="decimal">.</button>
-            <button class="calc-btn accent" data-action="equals" data-i18n="equals">=</button>
+            <button class="calc-btn accent" data-action="operator" data-value="+" data-i18n="add">+</button>
           </section>
+
+          <button class="calc-btn accent equals-row" data-action="equals" data-i18n="equals">=</button>
         </article>
 
         <aside class="history-panel">
