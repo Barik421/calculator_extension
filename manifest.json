@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Simple Calculator",
+  "version": "1.0.0",
+  "description": "A clean, lightweight calculator for quick daily use from the Chrome toolbar.",
+  "action": {
+    "default_title": "Simple Calculator",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "permissions": [
+    "storage"
+  ]
+}

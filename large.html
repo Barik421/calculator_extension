@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <link rel="stylesheet" href="large.css">
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow" data-i18n="appTitle">Simple Calculator</p>
+          <h1 data-i18n="largeViewTitle">Large calculator view</h1>
+        </div>
+        <button class="toolbar-link" id="openOptions" data-i18n="settings">Settings</button>
+      </section>
+
+      <section class="workspace">
+        <article class="calculator-panel">
+          <div class="screen-wrap">
+            <p class="screen-expression" id="expression">0</p>
+            <div class="screen" id="display" aria-live="polite">0</div>
+          </div>
+
+          <section class="keypad">
+            <button class="calc-btn utility" data-action="clear" data-i18n="ac">AC</button>
+            <button class="calc-btn utility" data-action="delete" data-i18n="delete">DEL</button>
+            <button class="calc-btn utility" data-action="percent" data-i18n="percent">%</button>
+            <button class="calc-btn accent" data-action="operator" data-value="/" data-i18n="divide">÷</button>
+
+            <button class="calc-btn utility" data-action="sign">±</button>
+            <button class="calc-btn" data-action="digit" data-value="7">7</button>
+            <button class="calc-btn" data-action="digit" data-value="8">8</button>
+            <button class="calc-btn" data-action="digit" data-value="9">9</button>
+
+            <button class="calc-btn accent" data-action="operator" data-value="*" data-i18n="multiply">×</button>
+            <button class="calc-btn" data-action="digit" data-value="4">4</button>
+            <button class="calc-btn" data-action="digit" data-value="5">5</button>
+            <button class="calc-btn" data-action="digit" data-value="6">6</button>
+
+            <button class="calc-btn accent" data-action="operator" data-value="-" data-i18n="subtract">−</button>
+            <button class="calc-btn" data-action="digit" data-value="1">1</button>
+            <button class="calc-btn" data-action="digit" data-value="2">2</button>
+            <button class="calc-btn" data-action="digit" data-value="3">3</button>
+
+            <button class="calc-btn accent" data-action="operator" data-value="+" data-i18n="add">+</button>
+            <button class="calc-btn wide" data-action="digit" data-value="0">0</button>
+            <button class="calc-btn" data-action="decimal" data-i18n="decimal">.</button>
+            <button class="calc-btn accent" data-action="equals" data-i18n="equals">=</button>
+          </section>
+        </article>
+
+        <aside class="history-panel">
+          <div class="history-head">
+            <h2 data-i18n="history">History</h2>
+            <button class="toolbar-link danger" id="clearHistory" data-i18n="clearHistory">Clear history</button>
+          </div>
+          <div class="history-list" id="historyList"></div>
+        </aside>
+      </section>
+    </main>
+    <script src="shared.js"></script>
+    <script src="large.js"></script>
+  </body>
+</html>

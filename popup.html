@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body data-view="popup">
+    <main class="app-shell">
+      <section class="calculator-card">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" data-i18n="appTitle">Simple Calculator</p>
+            <h1 class="screen-expression" id="expression">0</h1>
+          </div>
+          <button class="text-button" id="openOptions" data-i18n="settings">Settings</button>
+        </header>
+
+        <div class="screen" id="display" aria-live="polite">0</div>
+
+        <section class="keypad" aria-label="Calculator keypad">
+          <button class="calc-btn utility" data-action="clear" data-i18n="ac">AC</button>
+          <button class="calc-btn utility" data-action="delete" data-i18n="delete">DEL</button>
+          <button class="calc-btn utility" data-action="percent" data-i18n="percent">%</button>
+          <button class="calc-btn accent" data-action="operator" data-value="/" data-i18n="divide">÷</button>
+
+          <button class="calc-btn utility" data-action="sign">±</button>
+          <button class="calc-btn" data-action="digit" data-value="7">7</button>
+          <button class="calc-btn" data-action="digit" data-value="8">8</button>
+          <button class="calc-btn" data-action="digit" data-value="9">9</button>
+
+          <button class="calc-btn accent" data-action="operator" data-value="*" data-i18n="multiply">×</button>
+          <button class="calc-btn" data-action="digit" data-value="4">4</button>
+          <button class="calc-btn" data-action="digit" data-value="5">5</button>
+          <button class="calc-btn" data-action="digit" data-value="6">6</button>
+
+          <button class="calc-btn accent" data-action="operator" data-value="-" data-i18n="subtract">−</button>
+          <button class="calc-btn" data-action="digit" data-value="1">1</button>
+          <button class="calc-btn" data-action="digit" data-value="2">2</button>
+          <button class="calc-btn" data-action="digit" data-value="3">3</button>
+
+          <button class="calc-btn accent" data-action="operator" data-value="+" data-i18n="add">+</button>
+          <button class="calc-btn wide" data-action="digit" data-value="0">0</button>
+          <button class="calc-btn" data-action="decimal" data-i18n="decimal">.</button>
+          <button class="calc-btn accent" data-action="equals" data-i18n="equals">=</button>
+        </section>
+
+        <section class="history-panel collapsed" id="historyPanel">
+          <div class="history-header">
+            <button class="text-button history-toggle" id="toggleHistory" data-i18n="history">History</button>
+            <button class="text-button danger" id="clearHistory" data-i18n="clearHistory">Clear history</button>
+          </div>
+          <div class="history-list" id="historyList"></div>
+        </section>
+
+        <footer class="footer-actions">
+          <button class="link-button" id="openLargeView" data-i18n="openLargeView">Open large view</button>
+        </footer>
+      </section>
+    </main>
+    <script src="shared.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

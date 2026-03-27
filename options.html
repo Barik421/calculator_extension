@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator Settings</title>
+    <link rel="stylesheet" href="options.css">
+  </head>
+  <body>
+    <main class="options-shell">
+      <section class="options-card">
+        <p class="eyebrow" data-i18n="appTitle">Simple Calculator</p>
+        <h1 data-i18n="optionsTitle">Calculator settings</h1>
+        <p class="lead" data-i18n="optionsDescription">Customize language, history, and layout preferences for your extension pack.</p>
+
+        <form id="settingsForm" class="settings-form">
+          <label class="field">
+            <span data-i18n="language">Language</span>
+            <select id="language">
+              <option value="en" data-i18n="languageEnglish">English</option>
+              <option value="uk" data-i18n="languageUkrainian">Ukrainian</option>
+            </select>
+          </label>
+
+          <label class="field checkbox-row">
+            <input id="historyEnabled" type="checkbox">
+            <span data-i18n="historyEnabledLabel">Enable history</span>
+          </label>
+
+          <label class="field">
+            <span data-i18n="historyLimit">Recent calculations to keep</span>
+            <select id="historyLimit">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
+          </label>
+
+          <label class="field checkbox-row">
+            <input id="compactMode" type="checkbox">
+            <span data-i18n="compactMode">Compact mode</span>
+          </label>
+        </form>
+
+        <p class="status" id="saveStatus" aria-live="polite"></p>
+      </section>
+    </main>
+    <script src="shared.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>
