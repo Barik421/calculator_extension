@@ -1,6 +1,6 @@
-# Simple Calculator
+# BRNV Calculator
 
-Simple Calculator is a lightweight Chrome Extension (Manifest V3) with a polished popup calculator, a larger dedicated view, and bilingual settings.
+BRNV Calculator is a lightweight Chrome Extension (Manifest V3) with a polished popup calculator, a larger dedicated view, and bilingual settings.
 
 ## Features
 
