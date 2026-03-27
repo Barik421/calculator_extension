@@ -110,6 +110,10 @@ h1 {
   margin: 0 0 10px;
 }
 
+.settings-title {
+  margin-top: 4px;
+}
+
 .lead {
   margin: 0 0 28px;
   max-width: 620px;
