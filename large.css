@@ -126,14 +126,25 @@ body[data-compact="true"] .screen {
 
 .function-row {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   margin-bottom: 14px;
 }
 
-.keypad {
+.keypad-layout {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) 96px;
+  gap: 14px;
+}
+
+.number-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.operator-stack {
+  display: grid;
   gap: 14px;
 }
 
@@ -198,6 +209,36 @@ body[data-compact="true"] .calc-btn {
   width: 100%;
   margin-top: 14px;
   min-height: 78px;
+}
+
+.icon-button {
+  width: 52px;
+  height: 52px;
+  border: 0;
+  border-radius: 999px;
+  background: #f3f3f5;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icon-button svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.icon-button:hover,
+.icon-button:focus-visible {
+  outline: none;
+  color: var(--accent);
+  background: var(--button-hover);
+}
+
+.toolbar-icon {
+  flex-shrink: 0;
 }
 
 .toolbar-link {

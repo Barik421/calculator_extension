@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const compactMode = document.getElementById("compactMode");
   const saveStatus = document.getElementById("saveStatus");
   const backButton = document.getElementById("backButton");
+  const params = new URLSearchParams(window.location.search);
+  const view = params.get("view") || "large";
+  const returnTo = params.get("returnTo") || (view === "popup" ? "popup.html" : "large.html");
 
   let settings = await getSyncSettings();
 
@@ -42,14 +45,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   form.addEventListener("change", persistSettings);
   backButton.addEventListener("click", () => {
-    if (window.history.length > 1) {
-      window.history.back();
-      return;
-    }
-
-    window.location.href = chrome.runtime.getURL("large.html");
+    window.location.href = chrome.runtime.getURL(returnTo);
   });
 
+  document.body.dataset.view = view;
   syncForm();
   applyTranslations();
 });

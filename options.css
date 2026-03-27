@@ -23,6 +23,32 @@ body {
     linear-gradient(180deg, #fafafa 0%, var(--bg) 100%);
 }
 
+.icon-button {
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: #f3f3f5;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icon-button svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.icon-button:hover,
+.icon-button:focus-visible {
+  outline: none;
+  background: #ebebee;
+  color: var(--accent);
+}
+
 .options-shell {
   max-width: 840px;
   margin: 0 auto;
@@ -43,22 +69,32 @@ body {
   margin-bottom: 18px;
 }
 
-.back-button {
-  border: 0;
-  border-radius: 999px;
-  background: #f3f3f5;
-  color: var(--text);
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
+body[data-view="popup"] {
+  min-height: auto;
+  width: 334px;
 }
 
-.back-button:hover,
-.back-button:focus-visible {
-  outline: none;
-  background: #ebebee;
-  color: var(--accent);
+body[data-view="popup"] .options-shell {
+  max-width: none;
+  padding: 10px;
+}
+
+body[data-view="popup"] .options-card {
+  border-radius: 24px;
+  padding: 14px;
+}
+
+body[data-view="popup"] .lead {
+  margin-bottom: 18px;
+  font-size: 14px;
+}
+
+body[data-view="popup"] .settings-form {
+  gap: 14px;
+}
+
+body[data-view="popup"] select {
+  max-width: 100%;
 }
 
 .eyebrow {

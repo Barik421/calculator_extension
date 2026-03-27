@@ -98,14 +98,25 @@ body[data-compact="true"] .screen {
 
 .function-row {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
   margin-bottom: 8px;
 }
 
-.keypad {
+.keypad-layout {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) 72px;
+  gap: 8px;
+}
+
+.number-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.operator-stack {
+  display: grid;
   gap: 8px;
 }
 
@@ -166,6 +177,32 @@ body[data-compact="true"] .utility-pill {
   width: 100%;
   margin-top: 8px;
   min-height: 54px;
+}
+
+.icon-button {
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: #f3f3f5;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icon-button svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.icon-button:hover,
+.icon-button:focus-visible {
+  outline: none;
+  color: var(--accent);
+  background: var(--button-hover);
 }
 
 .text-button,

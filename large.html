@@ -13,7 +13,12 @@
           <p class="eyebrow" data-i18n="appTitle">Simple Calculator</p>
           <h1 data-i18n="largeViewTitle">Large calculator view</h1>
         </div>
-        <button class="toolbar-link" id="openOptions" data-i18n="settings">Settings</button>
+        <button class="icon-button toolbar-icon" id="openOptions" type="button" data-i18n-aria="settings" aria-label="Settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M10.3 2.9h3.4l.5 2.2c.5.2 1 .4 1.4.8l2.1-.7 1.7 2.9-1.7 1.4c.1.5.1 1 .1 1.5s0 1-.1 1.5l1.7 1.4-1.7 2.9-2.1-.7c-.4.3-.9.6-1.4.8l-.5 2.2h-3.4l-.5-2.2c-.5-.2-1-.4-1.4-.8l-2.1.7-1.7-2.9 1.7-1.4a7 7 0 0 1 0-3l-1.7-1.4 1.7-2.9 2.1.7c.4-.3.9-.6 1.4-.8l.5-2.2Z"/>
+            <circle cx="12" cy="12" r="3.1"/>
+          </svg>
+        </button>
       </section>
 
       <section class="workspace">
@@ -28,29 +33,33 @@
             <button class="calc-btn utility utility-pill" data-action="delete" data-i18n="delete">DEL</button>
             <button class="calc-btn utility utility-pill" data-action="paren" data-value="(" data-i18n="openBracket">(</button>
             <button class="calc-btn utility utility-pill" data-action="paren" data-value=")" data-i18n="closeBracket">)</button>
-            <button class="calc-btn utility utility-pill" data-action="percent" data-i18n="percent">%</button>
           </section>
 
-          <section class="keypad">
-            <button class="calc-btn" data-action="digit" data-value="7">7</button>
-            <button class="calc-btn" data-action="digit" data-value="8">8</button>
-            <button class="calc-btn" data-action="digit" data-value="9">9</button>
-            <button class="calc-btn accent" data-action="operator" data-value="/" data-i18n="divide">÷</button>
+          <section class="keypad-layout">
+            <section class="number-grid">
+              <button class="calc-btn" data-action="digit" data-value="7">7</button>
+              <button class="calc-btn" data-action="digit" data-value="8">8</button>
+              <button class="calc-btn" data-action="digit" data-value="9">9</button>
 
-            <button class="calc-btn" data-action="digit" data-value="4">4</button>
-            <button class="calc-btn" data-action="digit" data-value="5">5</button>
-            <button class="calc-btn" data-action="digit" data-value="6">6</button>
-            <button class="calc-btn accent" data-action="operator" data-value="*" data-i18n="multiply">×</button>
+              <button class="calc-btn" data-action="digit" data-value="4">4</button>
+              <button class="calc-btn" data-action="digit" data-value="5">5</button>
+              <button class="calc-btn" data-action="digit" data-value="6">6</button>
 
-            <button class="calc-btn" data-action="digit" data-value="1">1</button>
-            <button class="calc-btn" data-action="digit" data-value="2">2</button>
-            <button class="calc-btn" data-action="digit" data-value="3">3</button>
-            <button class="calc-btn accent" data-action="operator" data-value="-" data-i18n="subtract">−</button>
+              <button class="calc-btn" data-action="digit" data-value="1">1</button>
+              <button class="calc-btn" data-action="digit" data-value="2">2</button>
+              <button class="calc-btn" data-action="digit" data-value="3">3</button>
 
-            <button class="calc-btn utility" data-action="sign">±</button>
-            <button class="calc-btn wide" data-action="digit" data-value="0">0</button>
-            <button class="calc-btn" data-action="decimal" data-i18n="decimal">.</button>
-            <button class="calc-btn accent" data-action="operator" data-value="+" data-i18n="add">+</button>
+              <button class="calc-btn wide" data-action="digit" data-value="0">0</button>
+              <button class="calc-btn" data-action="decimal" data-i18n="decimal">.</button>
+            </section>
+
+            <section class="operator-stack">
+              <button class="calc-btn accent" data-action="percent" data-i18n="percent">%</button>
+              <button class="calc-btn accent" data-action="operator" data-value="/" data-i18n="divide">÷</button>
+              <button class="calc-btn accent" data-action="operator" data-value="*" data-i18n="multiply">×</button>
+              <button class="calc-btn accent" data-action="operator" data-value="-" data-i18n="subtract">−</button>
+              <button class="calc-btn accent" data-action="operator" data-value="+" data-i18n="add">+</button>
+            </section>
           </section>
 
           <button class="calc-btn accent equals-row" data-action="equals" data-i18n="equals">=</button>

@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   openOptionsButton.addEventListener("click", async () => {
-    await chrome.runtime.openOptionsPage();
+    window.location.href = chrome.runtime.getURL("options.html?view=large&returnTo=large.html");
   });
 
   document.addEventListener("keydown", onKeydown);
