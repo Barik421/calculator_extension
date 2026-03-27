@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const language = document.getElementById("language");
   const historyEnabled = document.getElementById("historyEnabled");
   const historyLimit = document.getElementById("historyLimit");
-  const compactMode = document.getElementById("compactMode");
   const saveStatus = document.getElementById("saveStatus");
   const backButton = document.getElementById("backButton");
   const params = new URLSearchParams(window.location.search);
@@ -24,15 +23,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     language.value = settings.language;
     historyEnabled.checked = settings.historyEnabled;
     historyLimit.value = `${settings.historyLimit}`;
-    compactMode.checked = settings.compactMode;
   }
 
   async function persistSettings() {
     settings = {
       language: language.value,
       historyEnabled: historyEnabled.checked,
-      historyLimit: Number.parseInt(historyLimit.value, 10),
-      compactMode: compactMode.checked
+      historyLimit: Number.parseInt(historyLimit.value, 10)
     };
 
     await saveSyncSettings(settings);

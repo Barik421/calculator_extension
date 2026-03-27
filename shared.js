@@ -2,8 +2,7 @@
   const DEFAULT_SETTINGS = {
     language: "en",
     historyEnabled: true,
-    historyLimit: 10,
-    compactMode: false
+    historyLimit: 10
   };
 
   const MAX_RESULT_LENGTH = 18;
@@ -38,7 +37,6 @@
       languageUkrainian: "Ukrainian",
       historyEnabledLabel: "Enable history",
       historyLimit: "Recent calculations to keep",
-      compactMode: "Compact mode",
       saveStatus: "Settings saved",
       largeViewTitle: "BRNV Calculator"
     },
@@ -71,7 +69,6 @@
       languageUkrainian: "Українська",
       historyEnabledLabel: "Увімкнути історію",
       historyLimit: "Скільки останніх обчислень зберігати",
-      compactMode: "Компактний режим",
       saveStatus: "Налаштування збережено",
       largeViewTitle: "BRNV Calculator"
     }

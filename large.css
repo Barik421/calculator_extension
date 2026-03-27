@@ -26,10 +26,6 @@ body {
     linear-gradient(180deg, #fafafa 0%, var(--bg) 100%);
 }
 
-body[data-compact="true"] .workspace {
-  gap: 18px;
-}
-
 .page-shell {
   max-width: 1120px;
   margin: 0 auto;
@@ -119,11 +115,6 @@ h2 {
   display: none;
 }
 
-body[data-compact="true"] .screen {
-  min-height: 96px;
-  font-size: 42px;
-}
-
 .function-row {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -158,10 +149,6 @@ body[data-compact="true"] .screen {
   font-weight: 650;
   cursor: pointer;
   transition: background-color 0.12s ease, transform 0.12s ease;
-}
-
-body[data-compact="true"] .calc-btn {
-  min-height: 72px;
 }
 
 .utility-pill {

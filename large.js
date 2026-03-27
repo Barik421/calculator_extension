@@ -161,7 +161,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (areaName === "sync") {
       settings = await getSyncSettings();
       document.documentElement.lang = settings.language;
-      document.body.dataset.compact = String(settings.compactMode);
       bindTranslations(document, settings.language);
       renderHistory();
       syncView();
@@ -174,7 +173,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   document.documentElement.lang = settings.language;
-  document.body.dataset.compact = String(settings.compactMode);
   bindTranslations(document, settings.language);
   renderHistory();
   syncView();
