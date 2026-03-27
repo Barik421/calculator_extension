@@ -17,15 +17,15 @@
 }
 
 html {
-  width: 314px;
-  height: 610px;
+  width: 336px;
+  height: 560px;
   overflow: hidden;
 }
 
 body {
   margin: 0;
-  width: 314px;
-  height: 610px;
+  width: 336px;
+  height: 560px;
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background:
@@ -36,7 +36,7 @@ body {
 }
 
 .app-shell {
-  padding: 10px;
+  padding: 8px;
   height: 100%;
   overflow-y: auto;
 }
@@ -46,7 +46,7 @@ body {
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.94);
   box-shadow: var(--shadow);
-  padding: 14px;
+  padding: 12px;
   backdrop-filter: blur(10px);
 }
 
@@ -61,7 +61,7 @@ body {
 
 .eyebrow {
   margin: 0 0 6px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -70,21 +70,21 @@ body {
 
 .screen-expression {
   margin: 0;
-  min-height: 20px;
-  font-size: 13px;
+  min-height: 18px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   text-align: left;
 }
 
 .screen {
-  margin: 12px 0 12px;
-  min-height: 68px;
-  padding: 16px 14px;
-  border-radius: 22px;
+  margin: 10px 0 10px;
+  min-height: 60px;
+  padding: 14px 12px;
+  border-radius: 20px;
   background: linear-gradient(180deg, #ffffff 0%, #f1f1f3 100%);
   border: 1px solid #ececef;
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 700;
   line-height: 1.1;
   white-space: nowrap;
@@ -101,42 +101,42 @@ body {
 .function-row {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 7px;
+  margin-bottom: 7px;
 }
 
 .keypad-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 72px;
-  gap: 8px;
+  gap: 7px;
 }
 
 .number-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: 7px;
 }
 
 .operator-stack {
   display: grid;
-  gap: 8px;
+  gap: 7px;
 }
 
 .calc-btn {
   border: 0;
   border-radius: 999px;
-  min-height: 52px;
+  min-height: 48px;
   background: var(--button);
   color: var(--text);
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 650;
   cursor: pointer;
   transition: background-color 0.12s ease, transform 0.12s ease;
 }
 
 .utility-pill {
-  min-height: 40px;
-  font-size: 15px;
+  min-height: 36px;
+  font-size: 14px;
 }
 
 .calc-btn:hover,
@@ -169,8 +169,8 @@ body {
 
 .equals-row {
   width: 100%;
-  margin-top: 8px;
-  min-height: 54px;
+  margin-top: 7px;
+  min-height: 48px;
 }
 
 .icon-button {
@@ -205,7 +205,7 @@ body {
   background: transparent;
   padding: 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -224,8 +224,8 @@ body {
 }
 
 .history-panel {
-  margin-top: 12px;
-  padding-top: 12px;
+  margin-top: 10px;
+  padding-top: 10px;
   border-top: 1px solid #ededf0;
 }
 
@@ -235,9 +235,9 @@ body {
 
 .history-list {
   display: grid;
-  gap: 8px;
-  margin-top: 10px;
-  max-height: 132px;
+  gap: 7px;
+  margin-top: 8px;
+  max-height: 120px;
   overflow-y: auto;
 }
 
@@ -246,7 +246,7 @@ body {
   border-radius: 18px;
   border: 1px solid #ececef;
   background: #fafafb;
-  padding: 11px 13px;
+  padding: 10px 12px;
 }
 
 .history-item {
@@ -263,23 +263,23 @@ body {
 
 .history-expression {
   margin: 0 0 4px;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--muted);
 }
 
 .history-result {
   margin: 0;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--text);
 }
 
 .history-empty {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .footer-actions {
-  margin-top: 12px;
+  margin-top: 10px;
   justify-content: center;
 }
