@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const historyLimit = document.getElementById("historyLimit");
   const compactMode = document.getElementById("compactMode");
   const saveStatus = document.getElementById("saveStatus");
+  const backButton = document.getElementById("backButton");
 
   let settings = await getSyncSettings();
 
@@ -40,6 +41,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   form.addEventListener("change", persistSettings);
+  backButton.addEventListener("click", () => {
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+
+    window.location.href = chrome.runtime.getURL("large.html");
+  });
 
   syncForm();
   applyTranslations();
